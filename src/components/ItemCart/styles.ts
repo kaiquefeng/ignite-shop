@@ -6,6 +6,7 @@ export const ItemCartContainer = styled("div", {
 
 export const ImageContainer = styled("div", {
   width: "100%",
+  position: "relative",
   maxWidth: 101.94,
   height: 93,
   background: "linear-gradient(180deg, #1ea483 0%, #7465d4 100%)",
@@ -49,4 +50,21 @@ export const DetailProduct = styled("div", {
       color: "$green300",
     },
   },
+});
+
+export const BulletQuanty = styled("div", {
+  position: "absolute",
+  top: "-1rem",
+  right: "-1rem",
+  backgroundColor: "$green500",
+  border: "3px solid $gray800",
+
+  width: 34,
+  height: 34,
+  borderRadius: "50%",
+
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  zIndex: 10,
 });

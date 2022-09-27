@@ -4,27 +4,25 @@ import Image from "next/future/image";
 import { useState } from "react";
 import Stripe from "stripe";
 import { Button } from "../../components/base/Button";
+import { useShopCart } from "../../context/ShopCart";
+import { formatMoney } from "../../lib/format";
 import { stripe } from "../../lib/stripe";
 import {
   ImageContainer,
   ProductContainer,
   ProductDetails,
 } from "../../styles/pages/product";
+import { productType } from "../../types";
 
 interface ProductProps {
-  product: {
-    id: string;
-    name: string;
-    imageUrl: string;
-    price: string;
-    description: string;
-    defaultPriceId: string;
-  };
+  product: productType;
 }
 
 export default function Product({ product }: ProductProps) {
   const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] =
     useState(false);
+
+  const { addItem } = useShopCart();
 
   async function handleBuyButton() {
     try {
@@ -52,11 +50,14 @@ export default function Product({ product }: ProductProps) {
 
       <ProductDetails>
         <h1>{product.name}</h1>
-        <span>{product.price}</span>
+        <span>{formatMoney(product?.price)}</span>
 
         <p>{product.description}</p>
 
-        <Button disabled={isCreatingCheckoutSession} onClick={handleBuyButton}>
+        <Button
+          disabled={isCreatingCheckoutSession}
+          onClick={() => addItem(product)}
+        >
           Colocar na sacola
         </Button>
       </ProductDetails>
@@ -92,10 +93,7 @@ export const getStaticProps: GetStaticProps<any, { id: string }> = async ({
         id: product.id,
         name: product.name,
         imageUrl: product.images[0],
-        price: new Intl.NumberFormat("pt-BR", {
-          style: "currency",
-          currency: "BRL",
-        }).format(price.unit_amount / 100),
+        price: price.unit_amount,
         description: product.description,
         defaultPriceId: price.id,
       },

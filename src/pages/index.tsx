@@ -6,6 +6,7 @@ import "keen-slider/keen-slider.min.css";
 import { GetStaticProps } from "next";
 import Stripe from "stripe";
 import { CardProduct } from "../components/CardProduct";
+import { formatMoney } from "../lib/format";
 import { stripe } from "../lib/stripe";
 
 interface HomeProps {
@@ -45,10 +46,7 @@ export const getStaticProps: GetStaticProps = async () => {
       id: product.id,
       name: product.name,
       imageUrl: product.images[0],
-      price: new Intl.NumberFormat("pt-BR", {
-        style: "currency",
-        currency: "BRL",
-      }).format(price.unit_amount / 100),
+      price: formatMoney(price.unit_amount),
     };
   });
 

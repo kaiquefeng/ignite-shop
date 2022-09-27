@@ -1,18 +1,32 @@
 import Image from "next/future/image";
-import camisa from "../../assets/camisa.webp";
-import { DetailProduct, ImageContainer, ItemCartContainer } from "./styles";
+import { useShopCart } from "../../context/ShopCart";
+import { formatMoney } from "../../lib/format";
+import { productType } from "../../types";
+import {
+  BulletQuanty,
+  DetailProduct,
+  ImageContainer,
+  ItemCartContainer,
+} from "./styles";
 
-export function ItemCart() {
+interface ProductProps {
+  product: productType;
+}
+
+export function ItemCart({ product }: ProductProps) {
+  const { removeProductToCart } = useShopCart();
+
   return (
     <ItemCartContainer>
       <ImageContainer>
-        <Image src={camisa} width={101} height={93} alt="" />
+        <Image src={product.imageUrl} width={101} height={93} alt="" />
+        <BulletQuanty>{product.quanty}</BulletQuanty>
       </ImageContainer>
 
       <DetailProduct>
-        <span>Camiseta Beyond the Limits</span>
-        <strong>R$ 79,90</strong>
-        <p>Remover</p>
+        <span>{product.name}</span>
+        <strong>{formatMoney(product.price)}</strong>
+        <p onClick={() => removeProductToCart(product.id)}>Remover</p>
       </DetailProduct>
     </ItemCartContainer>
   );

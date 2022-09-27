@@ -1,4 +1,5 @@
 import { useShopCart } from "../../context/ShopCart";
+import { formatMoney } from "../../lib/format";
 import { Button } from "../base/Button";
 import { ItemCart } from "../ItemCart";
 import {
@@ -11,7 +12,10 @@ import {
 } from "./styles";
 
 export function Cart() {
-  const { toggleShopCart } = useShopCart();
+  const { toggleShopCart, CartItems, totalItems, totalValueCart } =
+    useShopCart();
+
+  console.log(CartItems);
   return (
     <CartContainer>
       <header>
@@ -21,9 +25,9 @@ export function Cart() {
       <main>
         <strong>Sacola de compras</strong>
         <ItemsCart>
-          <ItemCart />
-          <ItemCart />
-          <ItemCart />
+          {CartItems.map((item) => (
+            <ItemCart key={item.id} product={item} />
+          ))}
         </ItemsCart>
       </main>
 
@@ -31,11 +35,11 @@ export function Cart() {
         <TotalContainer>
           <LineTotal>
             <p>Quantidade</p>
-            <span>3 itens</span>
+            <span>{totalItems} itens</span>
           </LineTotal>
           <LineTotal>
             <strong>Valor total</strong>
-            <ValueTotal>R$ 270,00</ValueTotal>
+            <ValueTotal>{formatMoney(totalValueCart)}</ValueTotal>
           </LineTotal>
         </TotalContainer>
         <Button>Finalizar compra</Button>

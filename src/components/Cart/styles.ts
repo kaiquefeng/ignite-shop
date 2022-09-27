@@ -37,6 +37,7 @@ export const ItemsCart = styled("div", {
   gap: "1.5rem",
   overflowY: "scroll",
   maxHeight: 500,
+  padding: "1.5rem 0",
 });
 
 export const IconClose = styled("div", {
