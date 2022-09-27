@@ -3,7 +3,7 @@ import { useShopCart } from "../../context/ShopCart";
 import { formatMoney } from "../../lib/format";
 import { productType } from "../../types";
 import {
-  BulletQuanty,
+  BulletQuantity,
   DetailProduct,
   ImageContainer,
   ItemCartContainer,
@@ -20,7 +20,7 @@ export function ItemCart({ product }: ProductProps) {
     <ItemCartContainer>
       <ImageContainer>
         <Image src={product.imageUrl} width={101} height={93} alt="" />
-        <BulletQuanty>{product.quanty}</BulletQuanty>
+        <BulletQuantity>{product.quantity}</BulletQuantity>
       </ImageContainer>
 
       <DetailProduct>

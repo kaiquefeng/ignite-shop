@@ -12,8 +12,13 @@ import {
 } from "./styles";
 
 export function Cart() {
-  const { toggleShopCart, CartItems, totalItems, totalValueCart } =
-    useShopCart();
+  const {
+    toggleShopCart,
+    CartItems,
+    totalItems,
+    totalValueCart,
+    handleCheckoutButton,
+  } = useShopCart();
 
   console.log(CartItems);
   return (
@@ -42,7 +47,9 @@ export function Cart() {
             <ValueTotal>{formatMoney(totalValueCart)}</ValueTotal>
           </LineTotal>
         </TotalContainer>
-        <Button>Finalizar compra</Button>
+        <Button onClick={() => handleCheckoutButton(CartItems)}>
+          Finalizar compra
+        </Button>
       </footer>
     </CartContainer>
   );

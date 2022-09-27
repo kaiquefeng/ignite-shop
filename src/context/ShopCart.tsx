@@ -1,3 +1,4 @@
+import axios from "axios";
 import {
   createContext,
   ReactNode,
@@ -12,9 +13,11 @@ type MenuContextData = {
   CartItems: Array<productType>;
   totalItems: number;
   totalValueCart: string;
+  isCreatingCheckoutSession: boolean;
   toggleShopCart: () => void;
   addItem: (product) => void;
   removeProductToCart: (id) => void;
+  handleCheckoutButton: (products) => void;
 };
 
 export const MenuContext = createContext({} as MenuContextData);
@@ -26,6 +29,8 @@ type ShopCartContextProp = {
 export function ShopCartContext({ children }: ShopCartContextProp) {
   const [openCart, setOpenCart] = useState(false);
   const [CartItems, setCartItems] = useState([]);
+  const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] =
+    useState(false);
 
   useEffect(() => {
     const items = JSON.parse(localStorage.getItem("cart_items"));
@@ -40,10 +45,10 @@ export function ShopCartContext({ children }: ShopCartContextProp) {
     const itemExist = copyProductsCart.find((item) => item.id === product.id);
 
     if (!itemExist) {
-      product.quanty = 1;
+      product.quantity = 1;
       setCartItems((CartItems) => [...CartItems, product]);
     } else {
-      itemExist.quanty = itemExist.quanty + 1;
+      itemExist.quantity = itemExist.quantity + 1;
       setCartItems((CartItems) => [...CartItems]);
     }
     localStorage.setItem("cart_items", JSON.stringify(CartItems));
@@ -54,8 +59,8 @@ export function ShopCartContext({ children }: ShopCartContextProp) {
 
     const itemExist = copyProductsCart.find((item) => item.id === id);
 
-    if (itemExist.quanty > 1) {
-      itemExist.quanty = itemExist.quanty - 1;
+    if (itemExist.quantity > 1) {
+      itemExist.quantity = itemExist.quantity - 1;
       setCartItems((CartItems) => [...CartItems]);
     } else {
       const arrayFilter = copyProductsCart.filter(
@@ -67,7 +72,7 @@ export function ShopCartContext({ children }: ShopCartContextProp) {
     localStorage.setItem("cart_items", JSON.stringify(CartItems));
   }
 
-  const totalItems = CartItems.map((item) => Number(item.quanty)).reduce(
+  const totalItems = CartItems.map((item) => Number(item.quantity)).reduce(
     (prev, curr) => prev + curr,
     0
   );
@@ -76,11 +81,30 @@ export function ShopCartContext({ children }: ShopCartContextProp) {
   function getTotal(total, item) {
     const pricing = item.price;
 
-    return total + pricing * item.quanty;
+    return total + pricing * item.quantity;
   }
 
   function toggleShopCart() {
     setOpenCart(!openCart);
+  }
+
+  async function handleCheckoutButton(products) {
+    console.log(products);
+    try {
+      setIsCreatingCheckoutSession(true);
+
+      const response = await axios.post("/api/checkout", {
+        products,
+      });
+
+      const { checkoutUrl } = response.data;
+
+      window.location.href = checkoutUrl;
+    } catch (err) {
+      setIsCreatingCheckoutSession(false);
+
+      alert("Falha ao redirecionar ao checkout!");
+    }
   }
 
   return (
@@ -93,6 +117,8 @@ export function ShopCartContext({ children }: ShopCartContextProp) {
         addItem,
         removeProductToCart,
         totalItems,
+        isCreatingCheckoutSession,
+        handleCheckoutButton,
       }}
     >
       {children}

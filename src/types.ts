@@ -5,5 +5,5 @@ export interface productType {
   price: string;
   description: string;
   defaultPriceId: string;
-  quanty: number;
+  quantity: number;
 }

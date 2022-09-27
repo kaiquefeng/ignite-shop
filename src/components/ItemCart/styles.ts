@@ -52,7 +52,7 @@ export const DetailProduct = styled("div", {
   },
 });
 
-export const BulletQuanty = styled("div", {
+export const BulletQuantity = styled("div", {
   position: "absolute",
   top: "-1rem",
   right: "-1rem",
