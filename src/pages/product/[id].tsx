@@ -3,6 +3,7 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import Image from "next/future/image";
 import { useState } from "react";
 import Stripe from "stripe";
+import { Button } from "../../components/base/Button";
 import { stripe } from "../../lib/stripe";
 import {
   ImageContainer,
@@ -55,9 +56,9 @@ export default function Product({ product }: ProductProps) {
 
         <p>{product.description}</p>
 
-        <button disabled={isCreatingCheckoutSession} onClick={handleBuyButton}>
-          Comprar agora
-        </button>
+        <Button disabled={isCreatingCheckoutSession} onClick={handleBuyButton}>
+          Colocar na sacola
+        </Button>
       </ProductDetails>
     </ProductContainer>
   );
