@@ -1,12 +1,12 @@
-import Image from "next/future/image";
-import { HomeContainer, Product } from "../styles/pages/home";
+import { HomeContainer } from "../styles/pages/home";
 
 import { useKeenSlider } from "keen-slider/react";
 
 import "keen-slider/keen-slider.min.css";
 import { GetStaticProps } from "next";
-import Link from "next/link";
 import Stripe from "stripe";
+import { CardProduct } from "../components/CardProduct";
+import { formatMoney } from "../lib/format";
 import { stripe } from "../lib/stripe";
 
 interface HomeProps {
@@ -28,22 +28,7 @@ export default function Home({ products }: HomeProps) {
   return (
     <HomeContainer ref={sliderRef} className="keen-slider">
       {products.map((product) => {
-        return (
-          <Link
-            href={`/product/${product.id}`}
-            key={product.id}
-            prefetch={false}
-          >
-            <Product className="keen-slider__slide">
-              <Image src={product.imageUrl} width={520} height={480} alt="" />
-
-              <footer>
-                <strong>{product.name}</strong>
-                <span>{product.price}</span>
-              </footer>
-            </Product>
-          </Link>
-        );
+        return <CardProduct key={product.id} product={product} />;
       })}
     </HomeContainer>
   );
@@ -61,10 +46,7 @@ export const getStaticProps: GetStaticProps = async () => {
       id: product.id,
       name: product.name,
       imageUrl: product.images[0],
-      price: new Intl.NumberFormat("pt-BR", {
-        style: "currency",
-        currency: "BRL",
-      }).format(price.unit_amount / 100),
+      price: formatMoney(price.unit_amount),
     };
   });
 
