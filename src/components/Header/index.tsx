@@ -4,10 +4,10 @@ import { FiShoppingBag } from "react-icons/fi";
 import logoImg from "../../assets/logo.svg";
 import { useShopCart } from "../../context/ShopCart";
 import { Cart } from "../Cart";
-import { CartIcon, HeaderContainer } from "./styles";
+import { BulletQuantity, CartIcon, HeaderContainer } from "./styles";
 
 export function Header() {
-  const { openCart, toggleShopCart } = useShopCart();
+  const { openCart, toggleShopCart, totalItems } = useShopCart();
 
   return (
     <HeaderContainer>
@@ -15,6 +15,8 @@ export function Header() {
         <Image src={logoImg} alt="" />
       </Link>
       <CartIcon onClick={() => toggleShopCart()}>
+        {totalItems !== 0 && <BulletQuantity>{totalItems}</BulletQuantity>}
+
         <FiShoppingBag />
       </CartIcon>
       {openCart && <Cart />}

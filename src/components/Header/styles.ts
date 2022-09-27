@@ -14,6 +14,7 @@ export const HeaderContainer = styled("header", {
 
 export const CartIcon = styled("div", {
   backgroundColor: "$gray800",
+  position: "relative",
   width: 48,
   height: 48,
 
@@ -26,4 +27,23 @@ export const CartIcon = styled("div", {
   cursor: "pointer",
 
   "&:hover": {},
+});
+
+export const BulletQuantity = styled("div", {
+  position: "absolute",
+  top: "-0.5rem",
+  right: "-0.5rem",
+  backgroundColor: "$green500",
+  border: "3px solid $gray800",
+
+  width: 26,
+  height: 26,
+  borderRadius: "50%",
+
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  zIndex: 10,
+
+  fontSize: "10px",
 });
