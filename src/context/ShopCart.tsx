@@ -18,6 +18,7 @@ type MenuContextData = {
   addItem: (product) => void;
   removeProductToCart: (id) => void;
   handleCheckoutButton: (products) => void;
+  clearCartItems: () => void;
 };
 
 export const MenuContext = createContext({} as MenuContextData);
@@ -84,12 +85,15 @@ export function ShopCartContext({ children }: ShopCartContextProp) {
     return total + pricing * item.quantity;
   }
 
+  function clearCartItems() {
+    localStorage.setItem("cart_items", JSON.stringify([]));
+  }
+
   function toggleShopCart() {
     setOpenCart(!openCart);
   }
 
   async function handleCheckoutButton(products) {
-    console.log(products);
     try {
       setIsCreatingCheckoutSession(true);
 
@@ -119,6 +123,7 @@ export function ShopCartContext({ children }: ShopCartContextProp) {
         totalItems,
         isCreatingCheckoutSession,
         handleCheckoutButton,
+        clearCartItems,
       }}
     >
       {children}

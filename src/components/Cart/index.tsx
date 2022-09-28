@@ -20,7 +20,6 @@ export function Cart() {
     handleCheckoutButton,
   } = useShopCart();
 
-  console.log(CartItems);
   return (
     <CartContainer>
       <header>

@@ -1,7 +1,9 @@
 import { GetServerSideProps } from "next";
 import Image from "next/future/image";
 import Link from "next/link";
+import { useEffect } from "react";
 import Stripe from "stripe";
+import { useShopCart } from "../context/ShopCart";
 import { stripe } from "../lib/stripe";
 import {
   ContainerImages,
@@ -12,6 +14,7 @@ import {
 interface SuccessProps {
   costumerName: string;
   quantity: number;
+  session: any;
   products: {
     name: string;
     imageUrl: string;
@@ -22,8 +25,16 @@ export default function Success({
   costumerName,
   products,
   quantity,
+  session,
 }: SuccessProps) {
-  products.map((product) => console.log("map:::", product[0]));
+  const { clearCartItems } = useShopCart();
+
+  useEffect(() => {
+    if (session) {
+      clearCartItems();
+    }
+  }, []);
+
   return (
     <SuccessContainer>
       <ContainerImages>
@@ -61,6 +72,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const session = await stripe.checkout.sessions.retrieve(sessionId, {
     expand: ["line_items", "line_items.data", "line_items.data.price.product"],
   });
+  console.log("session::", session);
 
   const costumerName = session.customer_details.name;
   const product = session.line_items.data[0].price.product as Stripe.Product;
@@ -68,8 +80,6 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const products = session.line_items.data.map(
     (product) => product.price.product
   );
-
-  console.log(products);
 
   // @ts-ignore
   const productImages = products.map((item) => item.images);
@@ -79,6 +89,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
       costumerName,
       quantity: products.length,
       products: productImages,
+      session,
     },
   };
 };
